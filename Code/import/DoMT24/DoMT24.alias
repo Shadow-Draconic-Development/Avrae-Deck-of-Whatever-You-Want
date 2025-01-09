@@ -1,0 +1,107 @@
+multiline
+<drac2>
+
+
+def main() -> tuple(str, str, str):
+
+    prefix = ctx.prefix
+
+    ch = character()
+
+
+    embed_str = f"{prefix}embed -title 'Successful import' -f 'Successfully imported Deck of Many Things (2024)' -footer '!deckofcards import DoMT24 | 1/8/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'"
+
+    if (svar_dict := get_svar("DoWYW")):
+        svar_dict = load_json(svar_dict)
+
+    else:
+        svar_dict = {}
+
+
+    svar_dict["Deck of Many Things (2024)"] = {
+        "perm": [
+            "Balance",
+            "Comet",
+            "Donjon",
+            "Euryale",
+            "Fates",
+            "Flames",
+            "Gem",
+            "Key",
+            "Knight",
+            "Moon",
+            "Puzzle",
+            "Rogue",
+            "Ruin",
+            "Sage",
+            "Skull",
+            "Star",
+            "Sun",
+            "Talons",
+            "Throne",
+            "Void"
+
+        ],
+        "temp": [
+            "Jester",
+            "Fool"
+        ],
+        "decks": {
+            "1": {
+                "weight": 75,
+                "deck": [
+                    "Euryale",
+                    "Flames",
+                    "Jester",
+                    "Key",
+                    "Knight",
+                    "Moon",
+                    "Rogue",
+                    "Skull",
+                    "Star",
+                    "Sun",
+                    "Throne",
+                    "Void",
+                    "Ruin"
+                ]
+            },
+            "2": {
+                "weight": 25,
+                "deck": [
+                    "Balance",
+                    "Comet",
+                    "Donjon",
+                    "Euryale",
+                    "Fates",
+                    "Flames",
+                    "Fool",
+                    "Gem",
+                    "Jester",
+                    "Key",
+                    "Knight",
+                    "Moon",
+                    "Puzzle",
+                    "Rogue",
+                    "Sage",
+                    "Skull",
+                    "Star",
+                    "Sun",
+                    "Talons",
+                    "Throne",
+                    "Void",
+                    "Ruin"
+                ]
+            }
+        }
+    }
+
+    svar_str = f"{prefix}svar DoWYW {dump_json(svar_dict)}"
+
+    return embed_str, svar_str
+
+
+embed_str, svar_str = main()
+
+</drac2>
+{{embed_str}}
+{{svar_str}}

@@ -1,0 +1,109 @@
+embed
+<drac2>
+
+
+def main(input_list: list[str]) -> tuple(str, str, str, str):
+
+    if len(input_list) < 1:
+        return "You Have Been Sneak Attacked by an Error", "Expected at least deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    try:
+        input_list[0] = int(input_list[0])
+
+    except:
+        return "You Have Been Sneak Attacked by an Error", "Invalid deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if len(input_list) > 1:
+        try:
+            input_list[1] = int(input_list[1])
+
+            input_list[1] = int(input_list[1])
+
+
+            if input_list[1] < 1:
+                int("ERROR")
+
+        except:
+            return "You Have Been Sneak Attacked by an Error", "Invalid number of cards", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    else:
+        input_list.append(1)
+
+    if not (ch := character()):
+        return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not (cvar_dict := ch.get_cvar("magic_decks")):
+        return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    cvar_dict = load_json(cvar_dict)
+
+    if len(cvar_dict.keys()) < 1:
+        return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not f"deck {input_list[0]}" in cvar_dict.keys():
+        f = "\n".join(["That deck does not exist\n\n**Existing Deck #'s:**"] + [i.split("deck ")[-1] for i in cvar_dict.keys()])
+        return "You Have Been Sneak Attacked by an Error", f, "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    deck_name = cvar_dict[f"deck {input_list[0]}"]["name"]
+
+    known_deck_image_list = [
+        "aberration", "balance", "beast", "book", "bridge", "campfire", "cavern", "celestial", "comet", "construct", "corpse", "crossroads", "donjon", "door", "dragon", "elemental", "euryale", "expert", "fates", "fey", "fiend", "flames", "fool", "gem", "giant", "humanoid", "idiot", "jester", "key", "knight", "lance", "mage", "map", "maze", "mine", "monstrosity", "moon", "ooze", "path", "pit", "plant", "priest", "prisoner", "puzzle", "ring", "rogue", "ruin", "sage", "shield", "ship", "skull", "staff", "stairway", "star", "statue", "sun", "talons", "tavern", "temple", "throne", "tomb", "tower", "tree", "undead", "vizier", "void", "warrior", "well", "wild"
+    ]
+
+    if (svar_dict := get_svar("DoWYW")):
+        svar_dict = load_json(svar_dict)
+
+        if deck_name in svar_dict.keys():
+            deck_server_setting = True
+
+        else:
+            deck_server_setting = False
+
+    else:
+        deck_server_setting = False
+
+
+    selected_cards = []
+    known_cards = set()
+
+    for _ in range(input_list[1]):
+
+        deck_len = len(cvar_dict[f"deck {input_list[0]}"]["deck"])
+        card_index = randint(0, deck_len - 1)
+
+        selected_card = cvar_dict[f"deck {input_list[0]}"]["deck"][card_index]
+
+        selected_cards.append(selected_card)
+
+        if deck_server_setting:
+            if selected_card in svar_dict[deck_name]["temp"]:
+                cvar_dict[f"deck {input_list[0]}"]["deck"].pop(card_index)
+
+    for card in selected_cards:
+        temp_card = card.lower().split("the ")[-1]
+
+        if temp_card in known_deck_image_list:
+            known_cards.add(temp_card.capitalize())
+
+    if len(known_cards) < 1:
+        known_cards.add("wild")
+
+    card_url = f"https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/DoMT/{randchoice(list(known_cards))}.png"
+
+    ch.set_cvar("magic_decks", dump_json(cvar_dict))
+
+    selected_cards.insert(0, "**Selected Card(s):** ")
+
+    return f"{name} Draws From Their {deck_name}", "\n".join(selected_cards), "", card_url
+
+
+title, f, color, thumb = main(&ARGS&)
+
+l = "<"
+
+</drac2>
+-title "{{title}}"
+-f "{{f}}"
+-color "{{color}}"
+-thumb "{{thumb}}"
+-footer "{{ctx.prefix}}deckofcards draw [deck number] {{l}}# of cards> | 1/9/25 | ShadowsStride"

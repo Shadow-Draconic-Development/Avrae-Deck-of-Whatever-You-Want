@@ -1,0 +1,29 @@
+embed
+<drac2>
+
+def main() -> tuple(str, str, str, str):
+
+    if not (ch := character()):
+        return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not (cvar_dict := ch.get_cvar("magic_decks")):
+        return f"{name}'s Magic Decks", "None", "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
+
+    cvar_dict = load_json(cvar_dict)
+
+    if len(cvar_dict.keys()) < 1:
+        return f"{name}'s Magic Decks", "None", "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
+
+    f = ["**Deck #: Deck Name**"] + [f"{i}: {cvar_dict[f'deck {i}']['name']}" for i in [deck_num.split("deck ")[-1] for deck_num in cvar_dict.keys()]]
+
+    return f"{name}'s Magic Decks", "\n".join(f), "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
+
+title, f, color, thumb = main()
+
+
+</drac2>
+-title "{{title}}"
+-f "{{f}}"
+-color "{{color}}"
+-thumb "{{thumb}}"
+-footer "{{ctx.prefix}}deckofcards list | 1/9/25 | ShadowsStride"

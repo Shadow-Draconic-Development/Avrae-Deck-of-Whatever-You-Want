@@ -1,0 +1,46 @@
+embed
+<drac2>
+
+
+def main(input_list: list[str]) -> tuple(str, str, str, str):
+
+    if len(input_list) < 1:
+        return "You Have Been Sneak Attacked by an Error", "Expected at least deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    try:
+        input_list[0] = int(input_list[0])
+
+    except:
+        return "You Have Been Sneak Attacked by an Error", "Invalid deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not (ch := character()):
+        return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not (cvar_dict := ch.get_cvar("magic_decks")):
+        return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    cvar_dict = load_json(cvar_dict)
+
+    if len(cvar_dict.keys()) < 1:
+        return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    if not f"deck {input_list[0]}" in cvar_dict.keys():
+        f = "\n".join(["That deck does not exist\n\n**Existing Deck #'s:**"] + [i.split("deck ")[-1] for i in cvar_dict.keys()])
+        return "You Have Been Sneak Attacked by an Error", f, "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
+
+    deck_name = cvar_dict[f"deck {input_list[0]}"]["name"]
+    cvar_dict.pop(f"deck {input_list[0]}")
+
+    ch.set_cvar("magic_decks", dump_json(cvar_dict))
+
+    return f"{name} Gets Rid of Their {deck_name}", f"Deck #{input_list[0]} was removed", "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
+
+title, f, color, thumb = main(&ARGS&)
+
+
+</drac2>
+-title "{{title}}"
+-f "{{f}}"
+-color "{{color}}"
+-thumb "{{thumb}}"
+-footer "{{ctx.prefix}}deckofcards remove [deck number] | 1/9/25 | ShadowsStride"

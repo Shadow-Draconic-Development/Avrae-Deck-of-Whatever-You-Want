@@ -105,3 +105,46 @@ fieldset {
 .dark-mode .deck {
   border-color: #555;
 }
+
+/* Link section */
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #007bff; /* Light mode link */
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 1.2rem;
+}
+
+/* Dark Mode Link */
+body.dark-mode nav a {
+  color: #17a2b8; /* Dark mode link */
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+/* Link section */
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav a {
+  color: #007bff; /* Light mode link */
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 1.2rem;
+}
+
+/* Dark Mode Link */
+body.dark-mode nav a {
+  color: #17a2b8; /* Dark mode link */
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
