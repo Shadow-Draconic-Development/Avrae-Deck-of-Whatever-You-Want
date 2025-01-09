@@ -43,4 +43,4 @@ title, f, color, thumb = main(&ARGS&)
 -f "{{f}}"
 -color "{{color}}"
 -thumb "{{thumb}}"
--footer "{{ctx.prefix}}deckofcards remove [deck number] | 1/9/25 | ShadowsStride"
+-footer "{{ctx.prefix}}deckofcards remove [deck #] | 1/9/25 | ShadowsStride"

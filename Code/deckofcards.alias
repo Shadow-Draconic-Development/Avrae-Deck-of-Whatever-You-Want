@@ -1,0 +1,22 @@
+embed
+<drac2>
+
+prefix = ctx.prefix
+
+title = f"{ctx.author.display_name} Needs the Help Action"
+f1 = f"Thank you for installing my Deck of Whatever You Want content library\n"
+f2 = f"\nTo start with server settings setup, please run `{prefix}help deckofcards import` or view this [Markdown](https://github.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/blob/main/Code/import/import.md) file\n"
+f3 = f"\nAs a player, simply run `{prefix}deckofcards add [deck name]` to add decks to your character and `{prefix}deckofcards draw [deck #] <# of cards>` to draw from your decks."
+
+
+f = f1 + f2 + f3
+
+thumb = "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png
+footer = f"{prefix}deckofcards | 1/9/25 | ShadowsStride"
+
+
+</drac2>
+-title "{{title}}"
+-f "{{f}}"
+-thumb "{{thumb}}"
+-footer "{{footer}}"
