@@ -2,37 +2,59 @@ multiline
 <drac2>
 
 def main(input_dict: dict) -> tuple(str, str):
+    """
+    Main program function
 
+    Args:
+        input_dict (dict): Input dictionary from JSON string
+
+    Return:
+        str: Embed string
+        str: SVAR string
+    """
+
+    # If SVAR already exists, load SVAR dictionary
     if (svar_dict := get_svar("DoWYW")):
         svar_dict = load_json(svar_dict)
 
+    # If it doesn't exist, create empty dictionary
     else:
         svar_dict = {}
 
+    # For each magic deck imported, add deck to SVAR
     for deck_key, deck_value in input_dict.items():
         svar_dict[deck_key] = deck_value
 
-    f = ["**Successfully imported:**"] + [input_dict.keys()]
+    # Collect imported deck naames
+    f = ["**Successfully imported:**"] + list(input_dict.keys())
     f = "\n".join(f)
 
+    # We grab value from ctx.prefix so that we don't call it multiple times
     prefix = ctx.prefix
 
-    embed_str = f"{prefix}embed -title 'Successful import' -f '{f}' -footer '!deckofcards import [JSON string] | 1/9/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'"
+    # Setup embed string
+    embed_str = f"{prefix}embed -title 'Successful import' -f '{f}' -footer '!deckofcards import [JSON string] | 1/16/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'"
 
     return embed_str, f"{prefix}svar DoWYW {dump_json(svar_dict)}"
 
 
+# Collect inputs
 input_list = &ARGS&
 
+# If there is not at least one input 
 if len(input_list) < 1:
-    embed_str, svar_str = f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Expected a JSON string' -footer '!deckofcards import [JSON string] | 1/9/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png' -color '#CF142B'", ""
+    embed_str, svar_str = f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Expected a JSON string' -footer '!deckofcards import [JSON string] | 1/16/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png' -color '#CF142B'", ""
 
+# Otherwise
 else:
+
+    # Try to load input as a dictionary
     try:
         embed_str, svar_str = main(load_json(input_list[0]))
 
+    # If there was an error loading dictionary
     except:
-        embed_str, svar_str = f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Error processing JSON string' -footer '!deckofcards import [JSON string] | 1/9/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png' -color '#CF142B'", ""
+        embed_str, svar_str = f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Error processing JSON string' -footer '!deckofcards import [JSON string] | 1/16/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png' -color '#CF142B'", ""
 
 
 </drac2>

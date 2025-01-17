@@ -3,100 +3,147 @@ embed
 
 
 def main(input_list: list[str]) -> tuple(str, str, str, str):
+    """
+    This function processes the input list to draw cards from a specified deck.
+    
+    Args:
+        input_list (list[str]): List of inputs
 
+    Return:
+        str: Title
+        str: Main body paragraph
+        str: Color hex code
+        str: Image URL
+    """
+
+    # Makes sure at least 1 input is given
     if len(input_list) < 1:
         return "You Have Been Sneak Attacked by an Error", "Expected at least deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Checks to see if the input is a number
     try:
         input_list[0] = int(input_list[0])
 
+    # If the input is a number
     except:
         return "You Have Been Sneak Attacked by an Error", "Invalid deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # If there is more than one input
     if len(input_list) > 1:
+
+        # Verify that it is a number
         try:
             input_list[1] = int(input_list[1])
 
-            input_list[1] = int(input_list[1])
-
-
+            # If number is less than 1
             if input_list[1] < 1:
                 int("ERROR")
 
+        # If it is not a valid unmber
         except:
             return "You Have Been Sneak Attacked by an Error", "Invalid number of cards", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # If there is not more than one input
     else:
         input_list.append(1)
 
+    # Ensures that character is selected
     if not (ch := character()):
         return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Verifies that character has a deck of cards
     if not (cvar_dict := ch.get_cvar("magic_decks")):
         return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Load CVAR dictionary
     cvar_dict = load_json(cvar_dict)
 
+    # If character does not have a deck of cards
     if len(cvar_dict.keys()) < 1:
         return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # If deck # does not exist
     if not f"deck {input_list[0]}" in cvar_dict.keys():
         f = "\n".join(["That deck does not exist\n\n**Existing Deck #'s:**"] + [i.split("deck ")[-1] for i in cvar_dict.keys()])
         return "You Have Been Sneak Attacked by an Error", f, "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Grab deck name
     deck_name = cvar_dict[f"deck {input_list[0]}"]["name"]
 
+    # Known deck image for images
     known_deck_image_list = [
         "aberration", "balance", "beast", "book", "bridge", "campfire", "cavern", "celestial", "comet", "construct", "corpse", "crossroads", "donjon", "door", "dragon", "elemental", "euryale", "expert", "fates", "fey", "fiend", "flames", "fool", "gem", "giant", "humanoid", "idiot", "jester", "key", "knight", "lance", "mage", "map", "maze", "mine", "monstrosity", "moon", "ooze", "path", "pit", "plant", "priest", "prisoner", "puzzle", "ring", "rogue", "ruin", "sage", "shield", "ship", "skull", "staff", "stairway", "star", "statue", "sun", "talons", "tavern", "temple", "throne", "tomb", "tower", "tree", "undead", "vizier", "void", "warrior", "well", "wild"
     ]
 
+    # If SVAR exists, load dictionary
     if (svar_dict := get_svar("DoWYW")):
         svar_dict = load_json(svar_dict)
 
+        # If deck name in SVAR dictionary
         if deck_name in svar_dict.keys():
             deck_server_setting = True
 
+        # If deck name not in SVAR dictionary
         else:
             deck_server_setting = False
 
+    # If SVAR does not exist
     else:
         deck_server_setting = False
 
-
+    # Setup holders for selected cards, using a set for the known cards so that equal chance of image being chosen
     selected_cards = []
     known_cards = set()
 
+    # For each card drawn
     for _ in range(input_list[1]):
 
+        # Get the length of the deck of cards
         deck_len = len(cvar_dict[f"deck {input_list[0]}"]["deck"])
+
+        # Get random card index
         card_index = randint(0, deck_len - 1)
 
+        # Grab selected card
         selected_card = cvar_dict[f"deck {input_list[0]}"]["deck"][card_index]
 
+        # Add card to selected cards
         selected_cards.append(selected_card)
 
+        # If deck of cards exists in SVAR dictionary
         if deck_server_setting:
+
+            # If card drawn is a temporary card, remove card from player deck
             if selected_card in svar_dict[deck_name]["temp"]:
                 cvar_dict[f"deck {input_list[0]}"]["deck"].pop(card_index)
 
+    # For each card selected
     for card in selected_cards:
+
+        # Remove the from card name and grab actual card name
         temp_card = card.lower().split("the ")[-1]
 
+        # If it is a known card, add image to known cards
         if temp_card in known_deck_image_list:
             known_cards.add(temp_card.capitalize())
 
+    # If there are no known cards use "wild" for wildcard image
     if len(known_cards) < 1:
         known_cards.add("wild")
 
+    # Grab random card image URL
     card_url = f"https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/DoMT/{randchoice(list(known_cards))}.png"
 
+    # Update CVAR dictionary
     ch.set_cvar("magic_decks", dump_json(cvar_dict))
 
+    # Insert header
     selected_cards.insert(0, "**Selected Card(s):** ")
 
     return f"{name} Draws From Their {deck_name}", "\n".join(selected_cards), "", card_url
 
 
+# Main program function 
 title, f, color, thumb = main(&ARGS&)
 
 l = "<"
@@ -106,4 +153,4 @@ l = "<"
 -f "{{f}}"
 -color "{{color}}"
 -thumb "{{thumb}}"
--footer "{{ctx.prefix}}deckofcards draw [deck number] {{l}}# of cards> | 1/9/25 | ShadowsStride"
+-footer "{{ctx.prefix}}deckofcards draw [deck number] {{l}}# of cards> | 1/16/25 | ShadowsStride"

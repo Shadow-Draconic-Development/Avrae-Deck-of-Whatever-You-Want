@@ -42,46 +42,69 @@ def multiple_match_determine(search_result: list[str], input_value: str) -> str|
 
 
 def main(input_list: list[str]) -> tuple(str, str):
+    """
+    Main program function
 
+    Args:
+        input_list (list[str]): List of inputs
 
+    Return:
+        str: Embed string
+        str: SVAR string
+    """
+
+    # Load prefix so that we don't have to call ctx.prefix
     prefix = ctx.prefix
+
+    # Footer
     footer = f"{prefix}deckofcards import remove [deck name] | 1/8/25 | ShadowsStride"
 
-
+    # Check to see if SVAR exists, load SVAR dictionary if it does
     if (svar_dict := get_svar("DoWYW")):
         svar_dict = load_json(svar_dict)
 
+    # If it doesn't
     else:
         return f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Server settings do not exist' -color '#CF142B' -footer '{footer}' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png'", ""
 
+    # If there is not at least one input
     if len(input_list) < 1:
         return f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Expected deck name' -color '#CF142B' -footer '{footer}' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png'", ""
 
     input_list[0] = " ".join(input_list)
 
-
+    # If it finds at least one match
     if (search_result := search_list(input_list[0], svar_dict.keys())):
 
+        # If it finds exactly one match, set deck name
         if len(search_result) == 1:
             input_list[0] = search_result[0]
 
+        # If there are more than one match
         else:
+
+            # If there is an exact match
             if (search_result2 := multiple_match_determine(search_result, input_list[0])):
                 input_list[0] = search_result2
 
+            # If there is not an exact match
             else:
                 search_result.insert(0, "**Multiple Matches Found:**")
                 error_str = "\n".join(search_result)
 
                 return f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f '{error_str}' -color '#CF142B' -footer '{footer}' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png'", ""
 
+    # If it finds no matches
     else:
         return f"{prefix}embed -title 'You Have Been Sneak Attacked by an Error' -f 'Deck of cards not found ({input_list[0]})' -color '#CF142B' -footer '{footer}' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png'", ""
 
+    # Remove deck from SVAR dictionary
     svar_dict.pop(input_list[0])
 
     return f"{prefix}embed -title 'Successfully Removed Deck' -f 'You have successfully removed {input_list[0]} from the server settings.\n\nWARNING: Temporary cards (like the Jester and the Fool) will now be treated as permanent cards due to missing server settings of any existing decks assigned to characters.' -footer '{footer}' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'", f"{prefix}svar DoWYW {dump_json(svar_dict)}"
 
+
+# Main program function
 embed_str, svar_str = main(&ARGS&)
 
 

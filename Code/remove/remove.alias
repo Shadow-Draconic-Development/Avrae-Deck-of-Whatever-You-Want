@@ -3,38 +3,71 @@ embed
 
 
 def main(input_list: list[str]) -> tuple(str, str, str, str):
+    """
+    Main program function
 
+    Args:
+        input_list (list[str]): List of inputs
+    
+    Return:
+        str: Title
+        str: Body paragraph
+        str: Hex color code
+        str: Image URL
+    """
+
+    # Ensures that there is at least one input
     if len(input_list) < 1:
         return "You Have Been Sneak Attacked by an Error", "Expected at least deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Ensures that the input is a number
     try:
         input_list[0] = int(input_list[0])
 
+    # If the input is not a number
     except:
         return "You Have Been Sneak Attacked by an Error", "Invalid deck number", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Ensures that character is selected
     if not (ch := character()):
         return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Ensures that the character has a deck of cards
     if not (cvar_dict := ch.get_cvar("magic_decks")):
         return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Loads CVAR dictionary
     cvar_dict = load_json(cvar_dict)
 
+    # Ensures there is at least one deck of cards
     if len(cvar_dict.keys()) < 1:
         return "You Have Been Sneak Attacked by an Error", "You do not have any magic decks", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # If it doesn't find the deck specified
     if not f"deck {input_list[0]}" in cvar_dict.keys():
-        f = "\n".join(["That deck does not exist\n\n**Existing Deck #'s:**"] + [i.split("deck ")[-1] for i in cvar_dict.keys()])
+
+        # Create header of paragraph
+        f_str = ["That deck does not exist\n\n**Existing Deck #'s:**"]
+
+        # For each deck number, add deck number and its name
+        for num in [i.split("deck ")[-1] for i in cvar_dict.keys()]:
+            f_str.append(f"{num}: " + cvar_dict[f"deck {num}"]["name"])
+
+        # Combine body paragraph
+        f = "\n".join(f_str)
         return "You Have Been Sneak Attacked by an Error", f, "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Grab deck name and remove deck from dictionary
     deck_name = cvar_dict[f"deck {input_list[0]}"]["name"]
     cvar_dict.pop(f"deck {input_list[0]}")
 
+    # Update CVAR
     ch.set_cvar("magic_decks", dump_json(cvar_dict))
 
     return f"{name} Gets Rid of Their {deck_name}", f"Deck #{input_list[0]} was removed", "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
 
+
+# Main program function
 title, f, color, thumb = main(&ARGS&)
 
 
@@ -43,4 +76,4 @@ title, f, color, thumb = main(&ARGS&)
 -f "{{f}}"
 -color "{{color}}"
 -thumb "{{thumb}}"
--footer "{{ctx.prefix}}deckofcards remove [deck #] | 1/9/25 | ShadowsStride"
+-footer "{{ctx.prefix}}deckofcards remove [deck #] | 1/15/25 | ShadowsStride"

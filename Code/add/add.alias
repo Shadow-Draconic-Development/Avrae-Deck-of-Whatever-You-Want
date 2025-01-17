@@ -12,12 +12,20 @@ def select_deck(decks: dict) -> list[str]:
     Returns:
         list[str]: The selected deck
     """
-       
+    
+    # Grab random number from 1 to total weight in deck
     random_number = randint(1, sum(deck["weight"] for deck in decks.values()))
 
+    # Set cumulative weight to 0
     cumulative_weight = 0
+
+    # For each deck in the decks
     for deck_number, deck_data in decks.items():
+
+        # Add cumulative weight by selected deck weight
         cumulative_weight += deck_data["weight"]
+
+        # If random number less than or greater than cumulative weight, return result deck
         if random_number <= cumulative_weight:
             return deck_data["deck"]
 
@@ -55,64 +63,97 @@ def multiple_match_determine(search_result: list[str], input_value: str) -> str|
         str|bool: The exact match if found, otherwise False
     """
 
+    # For each match
     for match in search_result:
+
+        # If exact match
         if match.lower() == input_value.lower():
             return match
 
+    # If no exact match
     return False
 
 
 def main(input_list: list[str]) -> tuple(str, str, str, str):
+    """
+    Main function to add a deck to the character's magic decks.
 
+    Args:
+        input_list (list[str]): List of input arguments
 
+    Returns:
+        str: Title
+        str: Main body paragraph
+        str: Color hex code
+        str: Image URL    
+    """
+
+    # To make sure there is at least one input
     if len(input_list) < 1:
         return "You Have Been Sneak Attacked by an Error", "Expected name of deck to add", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # To ensure that a SVAR dictionary exists
     if not (svar_dict := get_svar("DoWYW")):
         return "You Have Been Sneak Attacked by an Error", "Server settings does not exist", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # To ensure that a character is selected
     if not (ch := character()):
         return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # Load SVAR dictionary
     svar_dict = load_json(svar_dict)
 
+    # If it finds at least one match
     if (search_result := search_list(input_list[0], svar_dict.keys())):
 
+        # If it finds exactly once match
         if len(search_result) == 1:
             input_list[0] = search_result[0]
 
+        # If it finds more than one match
         else:
+
+            # If it finds an exact match
             if (search_result2 := multiple_match_determine(search_result, input_list[0])):
                 input_list[0] = search_result2
 
+            # If it does not find an exact match
             else:
                 search_result.insert(0, "**Multiple Matches Found:**")
                 return "You Have Been Sneak Attacked by an Error", "\n".join(search_result), "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
+    # If no matches are found
     else:
         return "You Have Been Sneak Attacked by an Error", f"Deck of cards not found ({input_list[0]})", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png" 
 
+    # If CVAR exists, load CVAR dictionary
     if (cvar_dict := ch.get_cvar("magic_decks")):
         cvar_dict = load_json(cvar_dict)
 
+    # If CVAR does not exist, load empty dictionary
     else:
         cvar_dict = {}
 
+    # Deck # starts at 1
     i = 1
 
+    # To make the deck number next in line (under the assumption there may be gaps)
     while f"deck {i}" in cvar_dict.keys():
         i += 1
 
+    # Set deck details
     cvar_dict[f"deck {i}"] = {
         "name": input_list[0],
         "deck": select_deck(svar_dict[input_list[0]]["decks"])
     }
 
+    # Set CVAR dictionary
     ch.set_cvar("magic_decks", dump_json(cvar_dict))
 
     return "Deck added successfully", f"{input_list[0]} has been added successfully as deck {i}", "", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png"
 
 
+# Main program function
 title, f, color, thumb = main(&ARGS&)
 
 </drac2>
@@ -120,4 +161,4 @@ title, f, color, thumb = main(&ARGS&)
 -f "{{f}}"
 -color "{{color}}"
 -thumb "{{thumb}}"
--footer "{{ctx.prefix}}deckofcards add [deck name] | 1/8/25 | ShadowsStride"
+-footer "{{ctx.prefix}}deckofcards add [deck name] | 1/16/25 | ShadowsStride"

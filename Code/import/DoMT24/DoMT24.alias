@@ -3,21 +3,30 @@ multiline
 
 
 def main() -> tuple(str, str, str):
+    """
+    Constructs the embed string and SVAR string for importing the Deck of Many Things (2024).
+    
+    Return:
+        str: Embed string
+        str: SVAR string
+    """
 
-    prefix = ctx.prefix
+    # Ensures that character is selected
+    if not (ch := character()):
+        return "You Have Been Sneak Attacked by an Error", "You must have a character selected", "#CF142B", "https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/error.png"
 
-    ch = character()
+    # Constructs embed string
+    embed_str = f"{ctx.prefix}embed -title 'Successful import' -f 'Successfully imported Deck of Many Things (2024)' -footer '!deckofcards import DoMT24 | 1/16/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'"
 
-
-    embed_str = f"{prefix}embed -title 'Successful import' -f 'Successfully imported Deck of Many Things (2024)' -footer '!deckofcards import DoMT24 | 1/8/25 | ShadowsStride' -thumb 'https://raw.githubusercontent.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/refs/heads/main/Data/images/main.png'"
-
+    # If SVAR exists, load SVAR dictionary
     if (svar_dict := get_svar("DoWYW")):
         svar_dict = load_json(svar_dict)
 
+    # If SVAR does not exist, use empty dictionary
     else:
         svar_dict = {}
 
-
+    # Load dictionary
     svar_dict["Deck of Many Things (2024)"] = {
         "perm": [
             "Balance",
@@ -95,11 +104,13 @@ def main() -> tuple(str, str, str):
         }
     }
 
-    svar_str = f"{prefix}svar DoWYW {dump_json(svar_dict)}"
+    # Create SVAR string
+    svar_str = f"{ctx.prefix}svar DoWYW {dump_json(svar_dict)}"
 
     return embed_str, svar_str
 
 
+# Main program function
 embed_str, svar_str = main()
 
 </drac2>
