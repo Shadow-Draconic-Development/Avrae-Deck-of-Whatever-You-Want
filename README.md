@@ -1,6 +1,6 @@
 <h1>Deck of Whatever You Want<img align="right" src="./Data/images/main.png" width="100px"></h1>
 
-Content library that allows users to automate the usage of Deck of Many Things, along with custom made decks. while comprehensive, this was primarily made to make and utilize custom made decks that mirror the usage of Deck of Many Things and Deck of Many More Things.
+Content library that allows users to automate the usage of Deck of Many Things, along with custom made decks. While comprehensive, this was primarily made to make and utilize custom made decks that mirror the usage of Deck of Many Things and Deck of Many More Things.
 
 [Table of Contents](https://github.com/Shadow-Draconic-Development/Avrae-Deck-of-Whatever-You-Want/tree/main/ToC.md)
 [Shadow's Main Website](https://shadow-draconic-development.github.io/.github/)
