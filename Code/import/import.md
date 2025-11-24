@@ -3,7 +3,7 @@
 Allows users (requires administrative privileges) to import custom made decks from generated JSONs to SVAR
 
 ## Deck Import
-[Deck of Whaterver You Want Generator](https://shadow-draconic-development.github.io/Avrae-Deck-of-Whatever-You-Want/) is where you go to generate custom decks.
+[Deck of Whatever You Want Generator](https://shadow-draconic-development.github.io/Avrae-Deck-of-Whatever-You-Want/) is where you go to generate custom decks.
 
 - `Add Magic Deck`: Allows you to create a magic deck
     - `(Permanent Cards) Add Card`: Adds card that will shuffle back into the deck
